@@ -1,15 +1,16 @@
 # We will be using the same example but deep diving into more features
 
-from pydantic import BaseModel, EmailStr, AnyUrl # always import these 
-from typing import List, Dict, Optional
+from pydantic import BaseModel, EmailStr, AnyUrl, Field   # always import these 
+from typing import List, Dict, Optional, Annotated
 
 class Patient(BaseModel): # create a class that inherits from BaseModel
+    
     # define ideal schema for the data
-    name: str # Do Type Validation
+    name: Annotated[str,Field(max_length=50, title='Name of the patient', description='The name of the patient')] # Do Type Validation
     email: EmailStr # Do Email Validation
     LinkedIn: AnyUrl = None # AnyUrl se URL validation hota hai
-    age: int
-    weight: float
+    age: int = Field(gt=0, lt=120)
+    weight: float = Field(gt=0) # Field se hum constraints laga sakte hai, gt means greater than, to weight should be greater than 0
     married: bool
     allergies: Optional[List[str]] = None # List of strings, agar sirf list likhta to koi bhi type ka data aa sakta tha,  
     # but List[str] se sirf string type ka data aa sakta hai
